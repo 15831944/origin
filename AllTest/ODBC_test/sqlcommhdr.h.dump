@@ -1,0 +1,86 @@
+/** =============================================================================
+ ** Copyright (c) 2007 WaveTop Information Corp. All rights reserved.
+ **
+ ** The Mirror system
+ **
+ ** =============================================================================
+ */
+
+#ifndef __WAVETOP_MIRROR_ODBC_COMMON_HEADER_
+#define __WAVETOP_MIRROR_ODBC_COMMON_HEADER_
+
+#include <sql.h>
+#include <sqlext.h>
+#include <odbcss.h>
+
+#define WAVETOP_SQL_HANDLE_HENV      0
+#define WAVETOP_SQL_HANDLE_HDBC      1
+#define WAVETOP_SQL_HANDLE_HSTMT     2
+
+#define WAVETOP_SQL_COMMIT           0
+#define WAVETOP_SQL_ROLLBACK         1
+
+typedef struct _CONNECTION_MSSQL_ST {
+    char *pszInstance;
+    char *pszIP;
+    char *pszUser;
+    char *pszPassword;
+    int nPort;
+} MiSQLConnectSt;
+
+class CSqlConnect {
+public:
+
+    CSqlConnect();
+    ~CSqlConnect();
+
+public:
+
+    int Connect();
+
+    SQLHSTMT Allochstmt();
+
+    void FreeHstmt(SQLHSTMT hStmt);
+
+    int SetCommitAttribute(int nSwitch);
+
+    int SetRowCount(int nRowCount);
+
+    /* 重连SQL Server 服务器 */
+    int ReConnect();
+
+    void Close();
+
+    int SetEnv(const char *pszInstance, const char *pszIP, int nPort,
+        const char *pszUser, const char *pszPassword, const char *pszDBName = NULL);
+
+    int GetODBCErr(int nHandleType, SQLHSTMT hStmt, SQLCHAR *Sqlstate, SQLINTEGER *NativeError, 
+        SQLCHAR *MessageText, SQLSMALLINT BufferLength, SQLSMALLINT *TextLength);
+
+    int EndTran(int nHandleType, int nOperation);
+
+private:
+    void Clear();
+
+private:
+
+    /* ODBC环境句柄 */
+    SQLHENV m_hEnv;
+
+    /* ODBC连接句柄 */
+    SQLHDBC m_hDbc;
+
+    char m_szInstance[256];
+
+    char m_szIP[16];
+
+    char m_szUser[256];
+
+    char m_szPassword[256];
+
+    char m_szDBName[256];
+
+    int m_nPort;
+};
+
+#endif
