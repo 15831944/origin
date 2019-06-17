@@ -1,7 +1,7 @@
 #include "Test_Class.h"
 using namespace std;
 
-//#define MAINMAIN
+#define MAINMAIN
 
 
 #ifdef MAINMAIN

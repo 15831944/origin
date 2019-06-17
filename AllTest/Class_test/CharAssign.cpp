@@ -320,13 +320,7 @@ CharAssign::~CharAssign(void)
      return strTemp;
  }
 
-
-#include <iostream>
-#include <iterator>
-#include <string>
-#include <list>
-
- int main()
+ void StringAssignTest()
  {
      std::string s;
      // assign(size_type count, CharT ch)
